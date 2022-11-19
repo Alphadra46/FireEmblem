@@ -12,11 +12,13 @@ public class InputManagerScript : MonoBehaviour
     public PlayerInputAction playerInputAction;
     [HideInInspector] public InputAction move;
     [HideInInspector] public InputAction action;
+    [HideInInspector] public InputAction cancelAction;
 
     private void Awake()
     {
         instance = this;
         playerInputAction = new PlayerInputAction();
+        InitControls();
         OnEnablePlayerControls();
     }
 
@@ -32,19 +34,25 @@ public class InputManagerScript : MonoBehaviour
         
     }
 
-    public void OnEnablePlayerControls()
+    private void InitControls()
     {
         move = playerInputAction.Player.Move;
         action = playerInputAction.Player.Action;
-        
+        cancelAction = playerInputAction.Player.CancelAction;
+    }
+    
+    public void OnEnablePlayerControls()
+    {
         move.Enable();
         action.Enable();
+        cancelAction.Enable();
     }
 
     public void OnDisablePlayerControls()
     {
         move.Disable();
         action.Disable();
+        cancelAction.Disable();
     }
     
 }
