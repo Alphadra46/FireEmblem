@@ -21,7 +21,7 @@ public class RangeFinder
             
             foreach (var item in tileForPreviousStep)
             {
-                surroundingTiles.AddRange(MapManager.instance.GetNeighbourTiles(item));
+                surroundingTiles.AddRange(MapManager.instance.GetNeighbourTiles(item, new List<OverlayTile>()));
             }
             
             inRangeTiles.AddRange(surroundingTiles);
@@ -29,7 +29,6 @@ public class RangeFinder
             stepCount++;
         }
 
-        Debug.Log(inRangeTiles.Distinct().ToList());
         return inRangeTiles.Distinct().ToList();
     }
 }

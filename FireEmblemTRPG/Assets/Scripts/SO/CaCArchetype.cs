@@ -6,7 +6,8 @@ public class CaCArchetype : BaseArchetype
 {
     protected override void InitStats()
     {
-        hp = 27;
+        maxHP = 27;
+        hp = maxHP;
         movement = 4;
         strength = 13;
         magic = 6;
@@ -26,7 +27,8 @@ public class CaCArchetype : BaseArchetype
             rangeMax = 1,
             crit = 0,
             hit = 90,
-            weigth = 5
+            weigth = 5,
+            weaponType = "Weapon"
         };
     }
     

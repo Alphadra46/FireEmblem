@@ -6,7 +6,8 @@ public class RangeArchetype : BaseArchetype
 {
     protected override void InitStats()
     {
-        hp = 26;
+        maxHP = 26;
+        hp = maxHP;
         movement = 4;
         strength = 11;
         magic = 5;
@@ -26,7 +27,8 @@ public class RangeArchetype : BaseArchetype
             rangeMax = 2,
             crit = 0,
             hit = 85,
-            weigth = 6
+            weigth = 6,
+            weaponType = "Weapon"
         };
     }
     

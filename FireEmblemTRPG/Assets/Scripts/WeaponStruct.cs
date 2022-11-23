@@ -10,4 +10,5 @@ public struct WeaponStruct
     public int weigth;
     public int hit;
     public int crit;
+    public string weaponType;
 }

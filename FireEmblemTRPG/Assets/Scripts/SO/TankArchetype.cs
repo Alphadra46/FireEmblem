@@ -6,7 +6,8 @@ public class TankArchetype : BaseArchetype
 {
     protected override void InitStats()
     {
-        hp = 30;
+        maxHP = 30;
+        hp = maxHP;
         movement = 4;
         strength = 12;
         magic = 2;
@@ -26,13 +27,14 @@ public class TankArchetype : BaseArchetype
             rangeMax = 1,
             crit = 0,
             hit = 70,
-            weigth = 7
+            weigth = 7,
+            weaponType = "Weapon"
         };
     }
 
     protected override void CalculateDerivedStats()
     {
-        attack = strength + equippedWeapon.might; //TODO - Move to Take damage
+        //attack = strength + equippedWeapon.might; //TODO - Move to Take damage
         attackSpeed = speed - equippedWeapon.weigth;
         hitRate = dexterity + equippedWeapon.hit;
         avoidanceRate = speed - equippedWeapon.weigth;

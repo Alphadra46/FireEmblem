@@ -6,7 +6,8 @@ public class HealerArchetype : BaseArchetype
 {
     protected override void InitStats()
     {
-        hp = 22;
+        maxHP = 22;
+        hp = maxHP;
         movement = 4;
         strength = 6;
         magic = 12;
@@ -26,7 +27,8 @@ public class HealerArchetype : BaseArchetype
             rangeMax = 2,
             crit = 0,
             hit = 80,
-            weigth = 5
+            weigth = 5,
+            weaponType = "Spell"
         };
     }
     

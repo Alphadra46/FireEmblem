@@ -34,7 +34,7 @@ public class CombatManager : MonoBehaviour
         if (Random.Range(1, 100) > attacker.hitRate - defender.avoidanceRate)
             return;
         
-        
+        Debug.Log(attacker.hitRate - defender.avoidanceRate);
         defender.TakeDamage(attacker);
         
         //TODO - Pour la riposte il faut vérifier que l'ennemi ne soit pas mort mais aussi vérifier s'il peut riposter (Ex : CaC vs Range, le Range ne peut pas riposter contre le CaC et inversemen. Cela est dû à la range de 2 du dps range)

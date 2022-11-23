@@ -34,47 +34,62 @@ public class MapManager : MonoBehaviour
     {
         
     }
-    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile)
+    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> searchableTiles)
     {
-        var map = MapManager.instance.map;
 
+        Dictionary<Vector2Int, OverlayTile> tileToSearch = new Dictionary<Vector2Int, OverlayTile>();
+        tileToSearch.Clear();
+        if (searchableTiles.Count > 0)
+        {
+            foreach (var item in searchableTiles)
+            {
+                tileToSearch.Add(item.grid2DLocation, item);
+            }
+
+        }
+        else
+        {
+            tileToSearch = map;
+        }
+        
+        
         List<OverlayTile> neighbours = new List<OverlayTile>();
-
+        
         //Top Neighbour
         Vector2Int locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x, currentOverlayTile.gridLocation.y+1);
 
-        if (map.ContainsKey(locationToCheck))
+        if (tileToSearch.ContainsKey(locationToCheck))
         {
-            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 1)
-                neighbours.Add(map[locationToCheck]);
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - tileToSearch[locationToCheck].gridLocation.z) <= 1)
+                neighbours.Add(tileToSearch[locationToCheck]);
         }
         
         //Bottom Neighbour
         locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x, currentOverlayTile.gridLocation.y-1);
 
-        if (map.ContainsKey(locationToCheck))
+        if (tileToSearch.ContainsKey(locationToCheck))
         {
-            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 1)
-                neighbours.Add(map[locationToCheck]);
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - tileToSearch[locationToCheck].gridLocation.z) <= 1)
+                neighbours.Add(tileToSearch[locationToCheck]);
             
         }
         
         //Right Neighbour
         locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x+1, currentOverlayTile.gridLocation.y);
 
-        if (map.ContainsKey(locationToCheck))
+        if (tileToSearch.ContainsKey(locationToCheck))
         {
-            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 1)
-                neighbours.Add(map[locationToCheck]);
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - tileToSearch[locationToCheck].gridLocation.z) <= 1)
+                neighbours.Add(tileToSearch[locationToCheck]);
         }
         
         //Left Neighbour
         locationToCheck = new Vector2Int(currentOverlayTile.gridLocation.x-1, currentOverlayTile.gridLocation.y);
 
-        if (map.ContainsKey(locationToCheck))
+        if (tileToSearch.ContainsKey(locationToCheck))
         {
-            if (Mathf.Abs(currentOverlayTile.gridLocation.z - map[locationToCheck].gridLocation.z) <= 1)
-                neighbours.Add(map[locationToCheck]);
+            if (Mathf.Abs(currentOverlayTile.gridLocation.z - tileToSearch[locationToCheck].gridLocation.z) <= 1)
+                neighbours.Add(tileToSearch[locationToCheck]);
         }
 
         return neighbours;

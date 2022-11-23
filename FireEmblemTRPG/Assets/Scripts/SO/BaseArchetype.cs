@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class BaseArchetype : MonoBehaviour
 {
     //---------- Character Stats ----------
+    [HideInInspector] public int maxHP;
     [HideInInspector] public int hp;
     [HideInInspector] public int movement;
     [HideInInspector] public int strength;
@@ -29,7 +30,6 @@ public abstract class BaseArchetype : MonoBehaviour
     //---------- Private Variables ----------
     private int damage;
     
-    
     // Start is called before the first frame update
     void Start()
     {
@@ -47,10 +47,12 @@ public abstract class BaseArchetype : MonoBehaviour
     public void TakeDamage(BaseArchetype enemy)
     {
         //TODO - Add Accointance System
-        enemy.attack = enemy.strength + enemy.equippedWeapon.might; //TODO - Faire en sorte que cela fonctionne aussi pour les mages
+        enemy.attack = enemy.equippedWeapon.weaponType=="Weapon"?enemy.strength:enemy.magic + enemy.equippedWeapon.might; 
 
-        damage = (enemy.attack - defense) * CriticalHitValue(enemy, this);
-        //TODO - Subtract to HP the amount of damage
+        damage = (enemy.attack - (enemy.equippedWeapon.weaponType=="Weapon"?defense:resistance)) * CriticalHitValue(enemy, this);
+        Debug.Log(damage);
+        hp -= damage;
+        //TODO - Check the death of the character
     }
 
 
@@ -59,7 +61,8 @@ public abstract class BaseArchetype : MonoBehaviour
         int critValue;
         return critValue = Mathf.RoundToInt((attacker.dexterity + attacker.luck)/ 2) + attacker.equippedWeapon.crit - defender.criticalAvoidanceRate > Random.Range(1, 100)? 3:1;
     }
-    
+
+
     protected abstract void InitWeapon();
     protected abstract void InitStats();
     protected abstract void CalculateDerivedStats();

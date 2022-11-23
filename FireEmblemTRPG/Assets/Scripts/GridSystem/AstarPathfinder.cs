@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AstarPathfinder 
 {
-    public List<OverlayTile> FindPath(OverlayTile start, OverlayTile end)
+    public List<OverlayTile> FindPath(OverlayTile start, OverlayTile end, List<OverlayTile> searchableTiles)
     {
         List<OverlayTile> openList = new List<OverlayTile>();
         List<OverlayTile> closedList = new List<OverlayTile>();
@@ -25,7 +25,7 @@ public class AstarPathfinder
                 return GetFinishedList(start,end);
             }
 
-            var neighbourTiles = MapManager.instance.GetNeighbourTiles(currentOverlayTile);
+            var neighbourTiles = MapManager.instance.GetNeighbourTiles(currentOverlayTile, searchableTiles);
 
             foreach (var neighbour in neighbourTiles)
             {
@@ -35,8 +35,8 @@ public class AstarPathfinder
                     continue;
                 }
 
-                neighbour.G = GetManatthanDistance(start, neighbour);
-                neighbour.H = GetManatthanDistance(end, neighbour);
+                neighbour.G = GetManathanDistance(start, neighbour);
+                neighbour.H = GetManathanDistance(end, neighbour);
 
                 neighbour.previous = currentOverlayTile;
                 
@@ -66,7 +66,7 @@ public class AstarPathfinder
         return finishedList;
     }
 
-    private int GetManatthanDistance(OverlayTile start, OverlayTile neighbour)
+    private int GetManathanDistance(OverlayTile start, OverlayTile neighbour)
     {
         return Mathf.Abs(start.gridLocation.x - neighbour.gridLocation.x) + Mathf.Abs(start.gridLocation.y - neighbour.gridLocation.y);
     }
