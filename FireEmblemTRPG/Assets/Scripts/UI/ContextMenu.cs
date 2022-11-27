@@ -36,11 +36,13 @@ public class ContextMenu : MonoBehaviour
 
     public void ToggleCapaciteUI()
     {
+        Debug.Log("Open capacity menu");
         //add the capacity menu
     }
 
     public void Wait()
     {
+        Debug.Log("Waiting...");
         //add the wait function
     }
 }
