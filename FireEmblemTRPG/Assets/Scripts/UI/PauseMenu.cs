@@ -14,6 +14,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("Awake");
         uiInputAction = new DefaultInputActions();
         cancel = uiInputAction.UI.Cancel;
         cancel.Enable();
@@ -23,7 +24,7 @@ public class PauseMenu : MonoBehaviour
     private void ActivateToggle(InputAction.CallbackContext context)
     {
         Debug.Log("ok.");
-        //Toggle();
+        Toggle();
     }
 
     public void Toggle()
@@ -48,7 +49,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Menu()
     {
-        Toggle();
+        Time.timeScale = 1;
+        cancel.Disable();
         SceneManager.LoadScene(menuSceneName);
         //sceneFade.FadeTo(menuSceneName);
     }
