@@ -10,6 +10,7 @@ public class UiMenu : MonoBehaviour
     //public SceneFade sceneFade; add sceneFader
     public void Play()
     {
+        SceneManager.LoadScene(levelToLoad); //change name for the mainScene
         //sceneFade.FadeTo(levelToLoad);
     }
 
@@ -17,11 +18,6 @@ public class UiMenu : MonoBehaviour
     {
         Debug.Log("Quit");
         Application.Quit();
-    }
-
-    private void StartGame()
-    {
-        SceneManager.LoadScene(levelToLoad); //change name for the mainScene
     }
 
     private void Options()

@@ -878,7 +878,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 94073958}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 716482826}
+        m_TargetAssemblyTypeName: UiMenu, Assembly-CSharp
+        m_MethodName: Quit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &94073958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2114,7 +2126,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 331354840}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 716482827}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &331354840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3220,6 +3244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f707d1d7b2c3fdc46983f6040465bae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 0
   hp: 0
   movement: 0
   strength: 0
@@ -3235,6 +3260,12 @@ MonoBehaviour:
   hitRate: 0
   avoidanceRate: 0
   criticalAvoidanceRate: 0
+  hasActionLeft: 1
+  hasMovementLeft: 1
+  canCounter: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &469786884
 Transform:
   m_ObjectHideFlags: 0
@@ -10216,7 +10247,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1373344527}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 716482827}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Menu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1373344527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11145,7 +11188,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1634368774
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11608,6 +11651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b441073c72324ca645bce01e8d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHP: 0
   hp: 0
   movement: 0
   strength: 0
@@ -11623,6 +11667,12 @@ MonoBehaviour:
   hitRate: 0
   avoidanceRate: 0
   criticalAvoidanceRate: 0
+  hasActionLeft: 1
+  hasMovementLeft: 1
+  canCounter: 1
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &1679518066
 Transform:
   m_ObjectHideFlags: 0
@@ -13076,7 +13126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1913989052
 MonoBehaviour:
   m_ObjectHideFlags: 0

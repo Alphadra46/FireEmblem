@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Quentin/MainMenu.unity
+    guid: 92cecf4f9ab7fbd4b95948a00e082c01
+  - enabled: 1
+    path: Assets/Scenes/Quentin/SceneQuentin.unity
+    guid: 3e5ea3348463d714f9210234534f2481
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: dc15fa9cb3f0c9a41820401e605e1893,
       type: 2}

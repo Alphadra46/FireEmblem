@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
@@ -8,14 +9,21 @@ public class PauseMenu : MonoBehaviour
     public GameObject ui;
     //public SceneFade sceneFade;
     public string menuSceneName = "MainMenu";
+    private DefaultInputActions uiInputAction;
+    private InputAction cancel;
 
-    private void Update()
+    private void Awake()
     {
-        /*if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
-        {
-            Toggle();
-        }
-        */
+        uiInputAction = new DefaultInputActions();
+        cancel = uiInputAction.UI.Cancel;
+        cancel.Enable();
+        cancel.started += ActivateToggle;
+    }
+
+    private void ActivateToggle(InputAction.CallbackContext context)
+    {
+        Debug.Log("ok.");
+        //Toggle();
     }
 
     public void Toggle()
