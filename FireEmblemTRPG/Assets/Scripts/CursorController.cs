@@ -10,15 +10,19 @@ public class CursorController : MonoBehaviour
     [SerializeField] private bool activeDiagonals;
     public int characterMovementSpeed;
     [SerializeField] private LayerMask overlayTileLayer;
+    [SerializeField] private LayerMask enemyLayer;
     
     private Vector2 moveDirection;
 
-    private float customDeltaTime = 0.25f;
-    private float deltaTimeTracker;
+    //private float customDeltaTime = 0.25f;
+    //private float deltaTimeTracker;
 
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     private List<OverlayTile> inRangeAttackTiles = new List<OverlayTile>();
     private RangeFinder rangeFinder;
+    private List<OverlayTile> inRangeAttackPhaseTiles = new List<OverlayTile>();
+    private List<BaseArchetype> enemyInAttackRange = new List<BaseArchetype>();
+
 
     private List<OverlayTile> path = new List<OverlayTile>();
     private AstarPathfinder astarPathFinder;
@@ -28,7 +32,10 @@ public class CursorController : MonoBehaviour
     private BaseArchetype selectedCharacterAchetype;
     private BaseArchetype selectedCharacterForAction;
 
+    private BaseArchetype selectedEnemyForAttack;
+
     private bool isMoving = false;
+    private bool isAttacking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +50,7 @@ public class CursorController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (inRangeTiles.Contains(CurrentHoveredTile()) && !isMoving)
+        if (inRangeTiles.Contains(CurrentHoveredTile()) && !isMoving && selectedCharacterForAction != null && !isAttacking && selectedCharacterForAction.hasActionLeft)
         {
             path = astarPathFinder.FindPath(CharacterCurrentStandingTile(),CurrentHoveredTile(), inRangeTiles);
 
@@ -60,6 +67,11 @@ public class CursorController : MonoBehaviour
                 var arrowDir = arrowTranslator.TranslateDirection(previousTile, path[i], futureTile);
                 path[i].SetArrowSprite(arrowDir);
             }
+
+            if (selectedCharacterForAction != null)
+            {
+                Debug.Log(selectedCharacterForAction.gameObject.name);
+            }
             
         }
         
@@ -72,6 +84,8 @@ public class CursorController : MonoBehaviour
         if (path.Count <= 0 && isMoving)
         {
             isMoving = false;
+            //selectedCharacterForAction = null;
+            GetInRangeAttackTiles(CharacterCurrentStandingTile());
         }
     }
 
@@ -142,41 +156,130 @@ public class CursorController : MonoBehaviour
             item.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
+
+    private void GetInRangeAttackTiles(OverlayTile characterStandingTile)
+    {
+        bool enemyInRange = false;
+        
+        foreach (var item in inRangeAttackPhaseTiles)
+        {
+            item.HideTile();
+        }
+
+        var rangeMaxWeapon = selectedCharacterForAction.equippedWeapon.rangeMax;
+        var rangeMinWeapon = selectedCharacterForAction.equippedWeapon.rangeMin;
+        
+        inRangeAttackPhaseTiles = rangeFinder.GetTilesInRange(characterStandingTile,rangeMaxWeapon);
+
+        if (rangeMinWeapon == rangeMaxWeapon)
+        {
+            var temp = rangeFinder.GetTilesInRange(characterStandingTile, rangeMinWeapon-1);
+
+            foreach (var item in temp)
+            {
+                inRangeAttackPhaseTiles.Remove(item);
+            }
+
+        }
+        foreach (var item in inRangeAttackPhaseTiles)
+        {
+            Collider[] enemy = new Collider[1];//Maybe change to something bigger than 1
+            Physics.OverlapBoxNonAlloc(item.transform.position,new Vector3(0.5f,0.5f,0.5f),enemy,new Quaternion(0,0,0,0), enemyLayer);
+            if (enemy[0] != null)
+            { 
+                enemyInRange = true;
+                enemyInAttackRange.Add(enemy[0].GetComponent<BaseArchetype>());
+            }
+        }
+
+
+
+        if (enemyInRange)
+        {
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.ShowTile();
+                item.GetComponent<SpriteRenderer>().color = Color.blue;
+            }
+            isAttacking = true; //May cause some issues in the future
+        }
+        else
+        {
+            enemyInAttackRange.Clear();
+            isAttacking = false;
+            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction = null;
+        }
+        
+        //selectedCharacterForAction = null;//TODO - Change this 
+        
+    }
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayableCharacter") && (selectedCharacterForAction == null || selectedCharacterForAction.gameObject == other.gameObject))
+        if (other.CompareTag("NonPlayableCharacter") && isAttacking)
+        {
+            selectedEnemyForAttack = other.GetComponent<BaseArchetype>();
+        }
+        
+        if (isAttacking)
+            return;
+        
+        if ((selectedCharacterForAction == null || selectedCharacterForAction.gameObject == other.gameObject) && other.GetComponent<BaseArchetype>().hasMovementLeft)
         {
             selectedCharacterAchetype = other.GetComponent<BaseArchetype>();
             GetInRangeTiles(CharacterCurrentStandingTile());
         }
+
+        
     }
 
-    private OverlayTile CharacterCurrentStandingTile()
+    public OverlayTile CharacterCurrentStandingTile()
     {
         if (selectedCharacterAchetype != null)
         {
             Physics.Raycast(new Ray(new Vector3(selectedCharacterAchetype.transform.position.x,selectedCharacterAchetype.transform.position.y+0.5f,selectedCharacterAchetype.transform.position.z),Vector3.down), out RaycastHit overlayTile, 1.5f, overlayTileLayer);
             return overlayTile.collider.GetComponent<OverlayTile>();
         }
-        else
+        else if (selectedCharacterForAction != null)
         {
             Physics.Raycast(new Ray(new Vector3(selectedCharacterForAction.transform.position.x,selectedCharacterForAction.transform.position.y+0.5f,selectedCharacterForAction.transform.position.z),Vector3.down), out RaycastHit overlayTile2, 1.5f, overlayTileLayer);
             return overlayTile2.collider.GetComponent<OverlayTile>();
         }
+
+        return null;
     }
 
+    public OverlayTile CharacterCurrentStandingTile(BaseArchetype character)
+    {
+        if (character != null)
+        {
+            Physics.Raycast(new Ray(new Vector3(character.transform.position.x, character.transform.position.y + 0.5f, character.transform.position.z), Vector3.down), out RaycastHit overlayTile, 1.5f, overlayTileLayer);
+            return overlayTile.collider.GetComponent<OverlayTile>();
+        }
+
+        return null;
+    }
+    
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("PlayableCharacter") && selectedCharacterForAction == null)
+        if (selectedCharacterForAction == null && selectedCharacterAchetype != null)
         {
-            foreach (var item in MapManager.instance.map.Values)
+            foreach (var item in inRangeTiles) 
+            {
+                item.HideTile();
+            }
+            foreach (var item in inRangeAttackTiles) 
             {
                 item.HideTile();
             }
         }
         selectedCharacterAchetype = null; //Can be a problem for some situations
 
+        if (other.CompareTag("NonPlayableCharacter") && isAttacking)
+        {
+            selectedEnemyForAttack = null;
+        }
     }
 
 
@@ -186,14 +289,14 @@ public class CursorController : MonoBehaviour
             return;
         
         
-        if (selectedCharacterAchetype != null && selectedCharacterForAction == null)
+        if (selectedCharacterAchetype != null && selectedCharacterForAction == null && selectedCharacterAchetype.CompareTag("PlayableCharacter"))
         {
             selectedCharacterForAction = selectedCharacterAchetype;
             Debug.Log("Character Selected");
         }
-        else if (selectedCharacterAchetype == null && selectedCharacterForAction != null)
+        else if (selectedCharacterAchetype == null && selectedCharacterForAction != null && selectedCharacterForAction.hasMovementLeft)
         {
-            //path = astarPathFinder.FindPath(CharacterCurrentStandingTile(),CurrentHoveredTile(), inRangeTiles);
+            selectedCharacterForAction.hasMovementLeft = false;
             
             foreach (var item in inRangeTiles)
             {
@@ -207,6 +310,20 @@ public class CursorController : MonoBehaviour
             }
 
             isMoving = true;
+        }
+
+        if (isAttacking && enemyInAttackRange.Contains(selectedEnemyForAttack))
+        {
+            selectedCharacterForAction.canCounter = false;
+            CombatManager.instance.StartAttack(selectedCharacterForAction,selectedEnemyForAttack);
+            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction = null;
+            selectedEnemyForAttack = null;
+            isAttacking = false;
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.HideTile();
+            }
         }
         
     }
@@ -225,15 +342,15 @@ public class CursorController : MonoBehaviour
         
     }
 
-    private void DeselectCharacter(InputAction.CallbackContext context)
+    private void DeselectCharacter(InputAction.CallbackContext context) //TODO - Need to not be able to deselect a Character while in attack phase (If necessary) (If character is deselected after the attack)
     {
         if (selectedCharacterForAction == null) 
             return;
 
         selectedCharacterForAction = null;
-        foreach (var item in MapManager.instance.map.Values) // Problem : it hides the hovered character range if deselect while we're still on the character. Can be solved by a OnTriggerStay that call the GetInRangeTiles every frames.
+        foreach (var item in MapManager.instance.map.Values) // Issue : it hides the hovered character range if deselect while we're still on the character. Can be solved by a OnTriggerStay that call the GetInRangeTiles every frames.
         {
-            item.HideTile();
+            item.HideTile(); //TODO - Maybe change this to Hide only the range and attack range tiles
         }
     }
 
@@ -241,6 +358,13 @@ public class CursorController : MonoBehaviour
     private OverlayTile CurrentHoveredTile()
     {
         Physics.Raycast(new Ray(new Vector3(transform.position.x,transform.position.y+0.5f,transform.position.z),Vector3.down), out RaycastHit overlayTile, 1.5f, overlayTileLayer);
-        return overlayTile.collider.GetComponent<OverlayTile>();
+        if (overlayTile.collider != null)
+        {
+            return overlayTile.collider.GetComponent<OverlayTile>();
+        }
+        else
+        {
+            return null;
+        }
     }
 }

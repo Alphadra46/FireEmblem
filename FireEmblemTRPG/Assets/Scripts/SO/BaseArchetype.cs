@@ -30,6 +30,15 @@ public abstract class BaseArchetype : MonoBehaviour
     //---------- Private Variables ----------
     private int damage;
     
+    //---------- Action Variables ----------
+    [HideInInspector] public bool hasActionLeft = true;
+    [HideInInspector] public bool hasMovementLeft = true;
+    [HideInInspector] public bool canCounter = true;
+    
+    //---------- Inspector Variables ----------
+    public LayerMask layerMask;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -46,20 +55,20 @@ public abstract class BaseArchetype : MonoBehaviour
 
     public void TakeDamage(BaseArchetype enemy)
     {
-        //TODO - Add Accointance System
+        //TODO - Add "Accointance" System
         enemy.attack = enemy.equippedWeapon.weaponType=="Weapon"?enemy.strength:enemy.magic + enemy.equippedWeapon.might; 
 
         damage = (enemy.attack - (enemy.equippedWeapon.weaponType=="Weapon"?defense:resistance)) * CriticalHitValue(enemy, this);
-        Debug.Log(damage);
+        Debug.Log("Damage done : "+damage);
         hp -= damage;
         //TODO - Check the death of the character
+        //TODO - Counter attack of the defender if he's not dead and if he's in range
     }
 
 
     private int CriticalHitValue(BaseArchetype attacker, BaseArchetype defender)
     {
-        int critValue;
-        return critValue = Mathf.RoundToInt((attacker.dexterity + attacker.luck)/ 2) + attacker.equippedWeapon.crit - defender.criticalAvoidanceRate > Random.Range(1, 100)? 3:1;
+        return Mathf.RoundToInt((attacker.dexterity + attacker.luck)/ 2) + attacker.equippedWeapon.crit - defender.criticalAvoidanceRate > Random.Range(1, 100)? 3:1;
     }
 
 

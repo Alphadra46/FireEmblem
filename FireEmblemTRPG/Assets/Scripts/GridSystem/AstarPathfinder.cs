@@ -70,8 +70,4 @@ public class AstarPathfinder
     {
         return Mathf.Abs(start.gridLocation.x - neighbour.gridLocation.x) + Mathf.Abs(start.gridLocation.y - neighbour.gridLocation.y);
     }
-
-    
-    
-    
 }
