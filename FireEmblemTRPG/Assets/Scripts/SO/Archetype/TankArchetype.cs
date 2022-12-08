@@ -2,43 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealerArchetype : BaseArchetype
+public class TankArchetype : BaseArchetype
 {
     protected override void InitStats()
     {
-        maxHP = 22;
+        maxHP = 30;
         hp = maxHP;
         movement = 4;
-        strength = 6;
-        magic = 12;
-        dexterity = 6;
+        strength = 12;
+        magic = 2;
+        dexterity = 5;
         speed = 7;
-        luck = 6;
-        defense = 4;
-        resistance = 7;
+        luck = 5;
+        defense = 8;
+        resistance = 1;
+        job = "Charcutier";
     }
 
     protected override void InitWeapon()
     {
         equippedWeapon = new WeaponStruct()
         {
-            might = 5,
+            might = 8,
             rangeMin = 1,
-            rangeMax = 2,
+            rangeMax = 1,
             crit = 0,
-            hit = 80,
-            weigth = 5,
-            weaponType = "Spell"
+            hit = 70,
+            weigth = 7,
+            weaponType = "Weapon"
         };
     }
-    
+
     protected override void CalculateDerivedStats()
     {
-        attack = magic + equippedWeapon.might;//TODO - Move to Take damage
+        //attack = strength + equippedWeapon.might; //TODO - Move to Take damage
         attackSpeed = speed - equippedWeapon.weigth;
-        hitRate = (dexterity+luck)/2 + equippedWeapon.hit;
+        hitRate = dexterity + equippedWeapon.hit;
         avoidanceRate = speed - equippedWeapon.weigth;
         criticalHitRate = (dexterity + luck) / 2 + equippedWeapon.crit;
         criticalAvoidanceRate = luck;
     }
+
+    
 }

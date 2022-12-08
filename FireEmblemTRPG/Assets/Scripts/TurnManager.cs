@@ -93,8 +93,16 @@ public class TurnManager : MonoBehaviour
     {
         foreach (var item in playableCharacterList)
         {
-            item.hasMovementLeft = true;
-            item.hasActionLeft = true;
+            if (!item.isStun)
+            {
+                item.hasMovementLeft = true;
+                item.hasActionLeft = true;
+            }
+        }
+
+        foreach (var item in nonPlayableCharacterList)
+        {
+            item.isStun = false;
         }
     }
 
@@ -102,8 +110,16 @@ public class TurnManager : MonoBehaviour
     {
         foreach (var item in nonPlayableCharacterList)
         {
-            item.hasMovementLeft = true;
-            item.hasActionLeft = true;
+            if (!item.isStun)
+            {
+                item.hasMovementLeft = true;
+                item.hasActionLeft = true;
+            }
+        }
+        
+        foreach (var item in playableCharacterList)
+        {
+            item.isStun = false;
         }
     }
 

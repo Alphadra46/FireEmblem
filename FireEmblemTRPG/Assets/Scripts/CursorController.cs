@@ -315,7 +315,7 @@ public class CursorController : MonoBehaviour
         if (isAttacking && enemyInAttackRange.Contains(selectedEnemyForAttack))
         {
             selectedCharacterForAction.canCounter = false;
-            CombatManager.instance.StartAttack(selectedCharacterForAction,selectedEnemyForAttack);
+            CombatManager.instance.StartAttack(selectedCharacterForAction,selectedEnemyForAttack, 1);
             selectedCharacterForAction.hasActionLeft = false;
             selectedCharacterForAction = null;
             selectedEnemyForAttack = null;

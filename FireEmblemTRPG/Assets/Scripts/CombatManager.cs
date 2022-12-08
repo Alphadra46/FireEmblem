@@ -21,18 +21,18 @@ public class CombatManager : MonoBehaviour //TODO - Maybe make this class a sing
     }
     
     
-    public void StartAttack(BaseArchetype attacker, BaseArchetype defender)
+    public void StartAttack(BaseArchetype attacker, BaseArchetype defender, float damageModifier)
     {
         //TODO - Vérifier le nombre d'action possible par les deux personnages (Riposte possible ou non ainsi que l'action double si la différence d'Attack Speed est de 4 ou plus) 
         
         if (Random.Range(1, 100) > attacker.hitRate - defender.avoidanceRate) //TODO - Create a feedback for this
             return;
         
-        defender.TakeDamage(attacker);
+        defender.TakeDamage(attacker, damageModifier);
 
         if (defender.hp > 0 && defender.canCounter && IsCharacterInRangeForCounter(defender, attacker))
         {
-            StartAttack(defender,attacker);
+            StartAttack(defender,attacker, 0.5f);
         }
         
         //TODO - Pour la riposte il faut vérifier que l'ennemi ne soit pas mort mais aussi vérifier s'il peut riposter (Ex : CaC vs Range, le Range ne peut pas riposter contre le CaC et inversemen. Cela est dû à la range de 2 du dps range)
