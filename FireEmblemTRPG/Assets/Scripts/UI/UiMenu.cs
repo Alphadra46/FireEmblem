@@ -7,6 +7,8 @@ public class UiMenu : MonoBehaviour
 {
 
     public string levelToLoad = "MainLevel";
+    public GameObject mainMenu;
+    public GameObject tutoMenu;
     //public SceneFade sceneFade; add sceneFader
     public void Play()
     {
@@ -20,12 +22,18 @@ public class UiMenu : MonoBehaviour
         Application.Quit();
     }
 
-    private void Options()
+    public void OptionsMenu()
     {
 
     }
-    private void Credits()
+    public void CreditsMenu()
     {
 
+    }
+
+    public void StartTuto()
+    {
+        mainMenu.SetActive(false);
+        tutoMenu.SetActive(true);
     }
 }
