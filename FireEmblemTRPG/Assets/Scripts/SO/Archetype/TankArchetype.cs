@@ -23,6 +23,7 @@ public class TankArchetype : BaseArchetype
     {
         equippedWeapon = new WeaponStruct()
         {
+            weaponName = "Ribz",
             might = 8,
             rangeMin = 1,
             rangeMax = 1,

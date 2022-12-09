@@ -34,8 +34,7 @@ public class CombatManager : MonoBehaviour //TODO - Maybe make this class a sing
         {
             StartAttack(defender,attacker, 0.5f);
         }
-        
-        //TODO - Pour la riposte il faut vérifier que l'ennemi ne soit pas mort mais aussi vérifier s'il peut riposter (Ex : CaC vs Range, le Range ne peut pas riposter contre le CaC et inversemen. Cela est dû à la range de 2 du dps range)
+        ContextMenu.instance.Wait();//TODO - Maybe change this
     }
 
     private bool IsCharacterInRangeForCounter(BaseArchetype defender, BaseArchetype attacker)

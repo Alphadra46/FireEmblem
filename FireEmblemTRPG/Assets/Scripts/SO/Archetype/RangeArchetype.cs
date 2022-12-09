@@ -23,6 +23,7 @@ public class RangeArchetype : BaseArchetype
     {
         equippedWeapon = new WeaponStruct()
         {
+            weaponName = "Choc-ette",
             might = 6,
             rangeMin = 2,
             rangeMax = 2,

@@ -30,12 +30,12 @@ public class CursorController : MonoBehaviour
     private ArrowTranslator arrowTranslator;
     
     private BaseArchetype selectedCharacterAchetype;
-    private BaseArchetype selectedCharacterForAction;
+    [HideInInspector] public BaseArchetype selectedCharacterForAction;
 
     private BaseArchetype selectedEnemyForAttack;
 
     private bool isMoving = false;
-    private bool isAttacking = false;
+    [HideInInspector] public bool isAttacking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +70,7 @@ public class CursorController : MonoBehaviour
 
             if (selectedCharacterForAction != null)
             {
-                Debug.Log(selectedCharacterForAction.gameObject.name);
+                //Debug.Log(selectedCharacterForAction.gameObject.name);
             }
             
         }
@@ -86,6 +86,8 @@ public class CursorController : MonoBehaviour
             isMoving = false;
             //selectedCharacterForAction = null;
             GetInRangeAttackTiles(CharacterCurrentStandingTile());
+            ContextMenu.instance.ToggleContextUI();
+            ContextMenu.instance.uiAttackValues.selectedCharacter = selectedCharacterForAction;
         }
     }
 
@@ -201,13 +203,13 @@ public class CursorController : MonoBehaviour
                 item.ShowTile();
                 item.GetComponent<SpriteRenderer>().color = Color.blue;
             }
-            isAttacking = true; //May cause some issues in the future
+            //isAttacking = true; //May cause some issues in the future TODO - CHANGE THIS <-----------------------------------------------------------------------------------------
         }
         else
         {
             enemyInAttackRange.Clear();
             isAttacking = false;
-            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction.hasActionLeft = false;//TODO - Maybe change this
             selectedCharacterForAction = null;
         }
         

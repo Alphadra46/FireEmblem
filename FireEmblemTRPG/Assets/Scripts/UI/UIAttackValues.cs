@@ -6,11 +6,10 @@ using TMPro;
 
 public class UIAttackValues : MonoBehaviour
 {
-
-
-    [SerializeField]
-    private BaseArchetype selectedCharacter;
+    [HideInInspector] public BaseArchetype selectedCharacter;
     private BaseArchetype selectedEnemy;
+    
+    [SerializeField] private CursorController cursorController;
 
     [Header("Weapons")]
     public TextMeshProUGUI actualWeapon;
@@ -33,9 +32,9 @@ public class UIAttackValues : MonoBehaviour
 
     public void OnSelection()
     {
-
+        //selectedCharacter = cursorController.selectedCharacterForAction;
         //atkValue.text = selectedCharacter.attack.ToString();
-
+        
         hitValue.text = selectedCharacter.hitRate.ToString();
         critValue.text = selectedCharacter.criticalHitRate.ToString();
         asValue.text = selectedCharacter.attackSpeed.ToString();
@@ -43,7 +42,7 @@ public class UIAttackValues : MonoBehaviour
         resValue.text = selectedCharacter.resistance.ToString();
         avoValue.text = selectedCharacter.avoidanceRate.ToString();
 
-        hpValue.text = selectedCharacter.hp.ToString() + "/" + selectedCharacter.hp.ToString();//change for maxHP
+        hpValue.text = selectedCharacter.hp.ToString() + "/" + selectedCharacter.maxHP.ToString();//change for maxHP
 
         if (selectedCharacter.equippedWeapon.rangeMin == selectedCharacter.equippedWeapon.rangeMax)
         {
@@ -54,11 +53,16 @@ public class UIAttackValues : MonoBehaviour
             rngValue.text = selectedCharacter.equippedWeapon.rangeMin.ToString() + "-" + selectedCharacter.equippedWeapon.rangeMax.ToString();
         }
 
-        //actualWeapon.text = selectedCharacter.name.ToString();
+        actualWeapon.text = selectedCharacter.equippedWeapon.weaponName;
 
-        //characterName.text = selectedCharacter.name.ToString();
+        characterName.text = selectedCharacter.characterName;
         //lvlValue.text = selectedCharacter.attack.ToString();
         //classeValue.text = selectedCharacter.attack.ToString();
+    }
+
+    public void OnWeaponChoosed()
+    {
+        cursorController.isAttacking = true;
     }
 
 }

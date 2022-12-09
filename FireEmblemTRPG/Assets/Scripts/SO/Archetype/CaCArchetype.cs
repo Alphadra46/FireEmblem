@@ -23,6 +23,7 @@ public class CaCArchetype : BaseArchetype
     {
         equippedWeapon = new WeaponStruct()
         {
+            weaponName = "Diodon",
             might = 5,
             rangeMin = 1,
             rangeMax = 1,

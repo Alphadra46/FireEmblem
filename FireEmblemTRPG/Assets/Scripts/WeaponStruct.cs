@@ -4,6 +4,7 @@ using UnityEngine;
 
 public struct WeaponStruct
 {
+    public string weaponName;
     public int might;
     public int rangeMin;
     public int rangeMax;

@@ -3244,6 +3244,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f707d1d7b2c3fdc46983f6040465bae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: 
+  job: 
   maxHP: 0
   hp: 0
   movement: 0
@@ -3263,9 +3265,11 @@ MonoBehaviour:
   hasActionLeft: 1
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  selectedSkillsList: 
 --- !u!4 &469786884
 Transform:
   m_ObjectHideFlags: 0
@@ -11651,6 +11655,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b441073c72324ca645bce01e8d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterName: 
+  job: 
   maxHP: 0
   hp: 0
   movement: 0
@@ -11670,9 +11676,11 @@ MonoBehaviour:
   hasActionLeft: 1
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 0
+  selectedSkillsList: 
 --- !u!4 &1679518066
 Transform:
   m_ObjectHideFlags: 0

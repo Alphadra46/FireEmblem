@@ -23,6 +23,7 @@ public class HealerArchetype : BaseArchetype
     {
         equippedWeapon = new WeaponStruct()
         {
+            weaponName = "Beau-Fort",
             might = 5,
             rangeMin = 1,
             rangeMax = 2,
