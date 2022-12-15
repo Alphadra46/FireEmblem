@@ -23,4 +23,20 @@ public class TutoMenu : MonoBehaviour
         }
         
     }
+
+    public void PreviousTuto()
+    {
+        if (tutoIndex > 0)
+        {
+            tutoMenu.transform.GetChild(tutoIndex).gameObject.SetActive(false);
+            tutoMenu.transform.GetChild(tutoIndex - 1).gameObject.SetActive(true);
+
+            tutoIndex--;
+        }
+        else
+        {
+            gameManager.GetComponent<UiMainMenu>().StartTuto();
+        }
+        
+    }
 }
