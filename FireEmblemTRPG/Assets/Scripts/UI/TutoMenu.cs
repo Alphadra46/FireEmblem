@@ -5,17 +5,21 @@ using UnityEngine;
 public class TutoMenu : MonoBehaviour
 {
     public GameObject tutoMenu;
+    public GameObject gameManager;
     public int tutoIndex = 0;
 
     public void NextTuto()
     {
-        if (tutoMenu.transform.childCount > tutoIndex)
+        if (tutoIndex < tutoMenu.transform.childCount - 1)
         {
             tutoMenu.transform.GetChild(tutoIndex).gameObject.SetActive(false);
             tutoMenu.transform.GetChild(tutoIndex + 1).gameObject.SetActive(true);
 
             tutoIndex++;
-            //find a way to not have an error
+        }
+        else
+        {
+            gameManager.GetComponent<UiMainMenu>().Play();
         }
         
     }
