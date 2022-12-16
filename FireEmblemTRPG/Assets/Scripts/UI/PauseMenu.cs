@@ -54,4 +54,10 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(menuSceneName);
         //sceneFade.FadeTo(menuSceneName);
     }
+
+    public void Quit()
+    {
+        Debug.Log("Quit");
+        Application.Quit();
+    }
 }
