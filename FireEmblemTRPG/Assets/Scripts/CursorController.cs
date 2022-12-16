@@ -11,6 +11,7 @@ public class CursorController : MonoBehaviour
     public int characterMovementSpeed;
     [SerializeField] private LayerMask overlayTileLayer;
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private LayerMask allyLayer;
     
     private Vector2 moveDirection;
 
@@ -20,9 +21,11 @@ public class CursorController : MonoBehaviour
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     private List<OverlayTile> inRangeAttackTiles = new List<OverlayTile>();
     private RangeFinder rangeFinder;
-    private List<OverlayTile> inRangeAttackPhaseTiles = new List<OverlayTile>();
+    [HideInInspector] public List<OverlayTile> inRangeAttackPhaseTiles = new List<OverlayTile>();
     private List<BaseArchetype> enemyInAttackRange = new List<BaseArchetype>();
 
+    private List<BaseArchetype> allyInHealRange = new List<BaseArchetype>();
+    private List<OverlayTile> inRangeHealSkillTiles = new List<OverlayTile>();
 
     private List<OverlayTile> path = new List<OverlayTile>();
     private AstarPathfinder astarPathFinder;
@@ -34,14 +37,17 @@ public class CursorController : MonoBehaviour
 
     private BaseArchetype selectedEnemyForAttack;
 
+    private BaseArchetype selectedAllyForHeal;
+
     private bool isMoving = false;
     [HideInInspector] public bool isAttacking = false;
+    [HideInInspector] public bool isUsingSkill = false;
     // Start is called before the first frame update
     void Start()
     {
         InputManagerScript.instance.move.started += MoveCursor;
         InputManagerScript.instance.action.started += SelectCharacter;
-        InputManagerScript.instance.cancelAction.started += DeselectCharacter;
+        //InputManagerScript.instance.cancelAction.started += DeselectCharacter;
         rangeFinder = new RangeFinder();
         astarPathFinder = new AstarPathfinder();
         arrowTranslator = new ArrowTranslator();
@@ -50,7 +56,7 @@ public class CursorController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (inRangeTiles.Contains(CurrentHoveredTile()) && !isMoving && selectedCharacterForAction != null && !isAttacking && selectedCharacterForAction.hasActionLeft)
+        if (inRangeTiles.Contains(CurrentHoveredTile()) && !isMoving && selectedCharacterForAction != null && !isAttacking && selectedCharacterForAction.hasActionLeft && !isUsingSkill)
         {
             path = astarPathFinder.FindPath(CharacterCurrentStandingTile(),CurrentHoveredTile(), inRangeTiles);
 
@@ -88,6 +94,7 @@ public class CursorController : MonoBehaviour
             GetInRangeAttackTiles(CharacterCurrentStandingTile());
             ContextMenu.instance.ToggleContextUI();
             ContextMenu.instance.uiAttackValues.selectedCharacter = selectedCharacterForAction;
+            ContextMenu.instance.uiSkillValues.selectedCharacter = selectedCharacterForAction;
         }
     }
 
@@ -158,7 +165,11 @@ public class CursorController : MonoBehaviour
             item.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
-
+    
+    /// <summary>
+    /// Get the list of tiles where the character can Attack an enemy
+    /// </summary>
+    /// <param name="characterStandingTile"></param>
     private void GetInRangeAttackTiles(OverlayTile characterStandingTile)
     {
         bool enemyInRange = false;
@@ -198,6 +209,8 @@ public class CursorController : MonoBehaviour
 
         if (enemyInRange)
         {
+            ContextMenu.instance.contextUI.transform.GetChild(0).gameObject.SetActive(true);
+            ContextMenu.instance.contextUI.transform.GetChild(1).gameObject.SetActive(true);
             foreach (var item in inRangeAttackPhaseTiles)
             {
                 item.ShowTile();
@@ -209,12 +222,76 @@ public class CursorController : MonoBehaviour
         {
             enemyInAttackRange.Clear();
             isAttacking = false;
-            selectedCharacterForAction.hasActionLeft = false;//TODO - Maybe change this
-            selectedCharacterForAction = null;
+            
+            ContextMenu.instance.contextUI.transform.GetChild(0).gameObject.SetActive(false);
+            ContextMenu.instance.contextUI.transform.GetChild(1).gameObject.SetActive(true);
+            if (selectedCharacterForAction!=null)
+            {
+                if (selectedCharacterForAction.equippedSkillList[0].targetLayer == "Enemy")
+                {
+                    ContextMenu.instance.contextUI.transform.GetChild(1).gameObject.SetActive(false);
+                }
+            }
         }
         
         //selectedCharacterForAction = null;//TODO - Change this 
         
+    }
+
+    public void GetInRangeHealTiles(OverlayTile characterStandingTile)
+    {
+        bool allyInRange = false;
+        
+        foreach (var item in inRangeAttackPhaseTiles)
+        {
+            item.HideTile();
+        }
+
+        var rangeMaxWeapon = selectedCharacterForAction.equippedWeapon.rangeMax;
+        var rangeMinWeapon = selectedCharacterForAction.equippedWeapon.rangeMin;
+        
+        inRangeAttackPhaseTiles = rangeFinder.GetTilesInRange(characterStandingTile,rangeMaxWeapon);
+
+        if (rangeMinWeapon == rangeMaxWeapon)
+        {
+            var temp = rangeFinder.GetTilesInRange(characterStandingTile, rangeMinWeapon-1);
+
+            foreach (var item in temp)
+            {
+                inRangeAttackPhaseTiles.Remove(item);
+            }
+            
+        }
+        foreach (var item in inRangeAttackPhaseTiles)
+        {
+            Collider[] ally = new Collider[1];//Maybe change to something bigger than 1
+            Physics.OverlapBoxNonAlloc(item.transform.position,new Vector3(0.5f,0.5f,0.5f),ally,new Quaternion(0,0,0,0), allyLayer);
+            if (ally[0] != null)
+            { 
+                allyInRange = true;
+                allyInHealRange.Add(ally[0].GetComponent<BaseArchetype>());
+            }
+        }
+
+
+
+        if (allyInRange)
+        {
+            ContextMenu.instance.contextUI.transform.GetChild(0).gameObject.SetActive(true);
+            ContextMenu.instance.contextUI.transform.GetChild(1).gameObject.SetActive(true);
+            isUsingSkill = true;
+            // foreach (var item in inRangeAttackPhaseTiles)
+            // {
+            //     item.ShowTile();
+            //     item.GetComponent<SpriteRenderer>().color = Color.blue;
+            // }
+            //isAttacking = true; //May cause some issues in the future TODO - CHANGE THIS <-----------------------------------------------------------------------------------------
+        }
+        else
+        {
+            allyInHealRange.Clear();
+            isUsingSkill = false;
+        }
     }
     
     private void OnTriggerEnter(Collider other)
@@ -233,7 +310,11 @@ public class CursorController : MonoBehaviour
             GetInRangeTiles(CharacterCurrentStandingTile());
         }
 
-        
+        if (isUsingSkill && selectedAllyForHeal == null)
+        {
+            selectedAllyForHeal = other.GetComponent<BaseArchetype>();
+        }
+
     }
 
     public OverlayTile CharacterCurrentStandingTile()
@@ -282,6 +363,11 @@ public class CursorController : MonoBehaviour
         {
             selectedEnemyForAttack = null;
         }
+        
+        if (isUsingSkill && selectedAllyForHeal != null)
+        {
+            selectedAllyForHeal = null;
+        }
     }
 
 
@@ -314,7 +400,7 @@ public class CursorController : MonoBehaviour
             isMoving = true;
         }
 
-        if (isAttacking && enemyInAttackRange.Contains(selectedEnemyForAttack))
+        if (isAttacking && enemyInAttackRange.Contains(selectedEnemyForAttack) && !isUsingSkill)
         {
             selectedCharacterForAction.canCounter = false;
             CombatManager.instance.StartAttack(selectedCharacterForAction,selectedEnemyForAttack, 1);
@@ -327,7 +413,61 @@ public class CursorController : MonoBehaviour
                 item.HideTile();
             }
         }
-        
+
+        if (isUsingSkill && selectedCharacterForAction.equippedSkillList[0].skillName == "Fromagie" && selectedAllyForHeal != null)
+        {
+            Heal healSkill = (Heal)selectedCharacterForAction.equippedSkillList[0];
+            healSkill.Effect(selectedAllyForHeal);
+            selectedCharacterForAction.hasActionLeft = false;
+            isUsingSkill = false;
+            selectedCharacterForAction = null;
+            selectedAllyForHeal = null;
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.HideTile();
+            }
+        }
+
+        if (isUsingSkill && selectedCharacterForAction.equippedSkillList[0].skillName == "Rascaille" && selectedEnemyForAttack != null)
+        {
+            StunAttack stunSkill = (StunAttack)selectedCharacterForAction.equippedSkillList[0];
+            stunSkill.Effect(selectedEnemyForAttack);
+            isUsingSkill = false;
+            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction = null;
+            selectedEnemyForAttack = null;
+            isAttacking = false;
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.HideTile();
+            }
+        }
+
+        if (isUsingSkill && selectedCharacterForAction.equippedSkillList[0].skillName == "Bugne" && selectedEnemyForAttack != null)
+        {
+            selectedCharacterForAction.canCounter = false;
+            LongRangeAttack longRangeAttackSkill = (LongRangeAttack)selectedCharacterForAction.equippedSkillList[0];
+            longRangeAttackSkill.Effect(selectedCharacterForAction, selectedEnemyForAttack);
+            isUsingSkill = false;
+            isAttacking = false;
+            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction = null;
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.HideTile();
+            }
+        }
+
+        if (isUsingSkill && selectedCharacterForAction.equippedSkillList[0].skillName == "TourneDos" && selectedCharacterForAction != null)
+        {
+            isUsingSkill = false;
+            selectedCharacterForAction.hasActionLeft = false;
+            selectedCharacterForAction = null;
+            foreach (var item in inRangeAttackPhaseTiles)
+            {
+                item.HideTile();
+            }
+        }
     }
 
     private void MoveAlongPath()

@@ -11,10 +11,12 @@ public class StunAttack : SkillClass
         cooldown = 3;
         turnLeftBeforeReUse = 0;
         duration = 1;
+        targetLayer = "Enemy";
     }
 
     public void Effect(BaseArchetype target)
     {
         target.isStun = true;
+        turnLeftBeforeReUse = cooldown;
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5265605647175228731}
   - component: {fileID: 5265605647175228730}
   - component: {fileID: 5265605647175228733}
+  - component: {fileID: 2682478655079311291}
   m_Layer: 8
   m_Name: Range_Enemy
   m_TagString: NonPlayableCharacter
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52d5d152f97da645bd941aa1616f8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  characterName: 
   job: 
   maxHP: 0
   hp: 0
@@ -99,9 +100,33 @@ MonoBehaviour:
   hasActionLeft: 0
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  selectedSkillsList: 
+--- !u!114 &2682478655079311291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5265605647175228732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c252962ee876b48ab9b76eeee05401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayTileLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  allyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  characterMovementSpeed: 10
 --- !u!1 &5265605647421124201
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,7 +152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5265605647421124201}
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 0, y: 2.338, z: -0.062}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []

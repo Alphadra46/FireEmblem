@@ -11,10 +11,12 @@ public class Heal : SkillClass
         cooldown = 2;
         turnLeftBeforeReUse = 0;
         duration = 0;
+        targetLayer = "Ally";
     }
 
     public void Effect(BaseArchetype target)
     {
         target.hp += Mathf.Clamp(target.maxHP * 45 / 100, 0, target.maxHP - target.hp);
+        turnLeftBeforeReUse = cooldown;
     }
 }

@@ -12,10 +12,12 @@ public class LongRangeAttack : SkillClass
         cooldown = 2;
         turnLeftBeforeReUse = 0;
         duration = 0;
+        targetLayer = "Enemy";
     }
 
     public void Effect(BaseArchetype self, BaseArchetype target)
     {
         CombatManager.instance.StartAttack(self,target,1.25f);
+        turnLeftBeforeReUse = cooldown;
     }
 }

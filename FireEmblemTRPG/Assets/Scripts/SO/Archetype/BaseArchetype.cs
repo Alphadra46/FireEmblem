@@ -103,6 +103,11 @@ public abstract class BaseArchetype : MonoBehaviour
         return Mathf.RoundToInt((attacker.dexterity + attacker.luck)/2) + attacker.equippedWeapon.crit - defender.criticalAvoidanceRate > Random.Range(1, 100)? 3:1;
     }
 
+    /// <summary>
+    /// Determine the value of the Accointance system to know if the attacker have an advantage over the enemy or not
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <returns></returns>
     public float AccointanceValue(BaseArchetype enemy)
     {
         float value = ((job == "Fromager" && enemy.job == "Poissoniere") || (job == "Charcutier" && enemy.job == "Fromager") || (job == "Boulangere" && enemy.job == "Charcutier") || (job == "Poissoniere" && enemy.job == "Boulangere")) ? 1.5f : 1;

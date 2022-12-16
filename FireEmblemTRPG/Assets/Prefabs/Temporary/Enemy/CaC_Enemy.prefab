@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 214272015299243554}
   - component: {fileID: 214272015299243555}
   - component: {fileID: 214272015299243552}
+  - component: {fileID: 3101717275344468770}
   m_Layer: 8
   m_Name: CaC_Enemy
   m_TagString: NonPlayableCharacter
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b471e05e88da444c8b5c17315e9d668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  characterName: 
   job: 
   maxHP: 0
   hp: 0
@@ -182,9 +183,33 @@ MonoBehaviour:
   hasActionLeft: 1
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  selectedSkillsList: 
+--- !u!114 &3101717275344468770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 214272015299243553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c252962ee876b48ab9b76eeee05401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayTileLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  allyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  characterMovementSpeed: 10
 --- !u!1 &214272016406959222
 GameObject:
   m_ObjectHideFlags: 0

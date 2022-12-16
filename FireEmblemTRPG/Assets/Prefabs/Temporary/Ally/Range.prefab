@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3438316111334976047}
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: 0.119, y: 2.5, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a52d5d152f97da645bd941aa1616f8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  characterName: 
   job: 
   maxHP: 0
   hp: 0
@@ -266,6 +266,8 @@ MonoBehaviour:
   hasActionLeft: 1
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 512
+  selectedSkillsList: 

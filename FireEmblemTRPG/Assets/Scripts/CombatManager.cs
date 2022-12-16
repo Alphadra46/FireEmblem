@@ -30,11 +30,12 @@ public class CombatManager : MonoBehaviour //TODO - Maybe make this class a sing
         
         defender.TakeDamage(attacker, damageModifier);
 
-        if (defender.hp > 0 && defender.canCounter && IsCharacterInRangeForCounter(defender, attacker))
+        if (defender.hp > 0 && defender.canCounter && IsCharacterInRangeForCounter(defender, attacker) && !defender.isStun)
         {
             StartAttack(defender,attacker, 0.5f);
+            InputManagerScript.instance.OnEnablePlayerControls();
         }
-        ContextMenu.instance.Wait();//TODO - Maybe change this
+        //ContextMenu.instance.Wait();//TODO - Maybe change this
     }
 
     private bool IsCharacterInRangeForCounter(BaseArchetype defender, BaseArchetype attacker)

@@ -1,23 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    private List<BaseArchetype> playableCharacterList = new List<BaseArchetype>();
-    private List<BaseArchetype> nonPlayableCharacterList = new List<BaseArchetype>();
+    public static TurnManager instance;
+    
+    [HideInInspector] public List<BaseArchetype> playableCharacterList = new List<BaseArchetype>();
+    [HideInInspector] public List<BaseArchetype> nonPlayableCharacterList = new List<BaseArchetype>();
 
-    [SerializeField] private TurnStates actualTurnState;
+    public TurnStates actualTurnState;
     public enum TurnStates
     {
         PlayerTurn,
         EnemyTurn
     }
 
+    private void Awake()
+    {
+        instance = this;
+        InitializeLists();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        InitializeLists();
         actualTurnState = TurnStates.PlayerTurn;
     }
 
@@ -98,6 +106,19 @@ public class TurnManager : MonoBehaviour
                 item.hasMovementLeft = true;
                 item.hasActionLeft = true;
             }
+            item.equippedSkillList[0].turnLeftBeforeReUse--;
+            foreach (var skill in item.equippedSkillList)
+            {
+                if (skill.skillName =="TourneDos")
+                {
+                    skill.durationLeft--;
+                    if (skill.durationLeft == 0)
+                    {
+                        DefenseBuff defenseBuffSkill = (DefenseBuff)skill;
+                        defenseBuffSkill.DisableEffect(item);
+                    }
+                }
+            }
         }
 
         foreach (var item in nonPlayableCharacterList)
@@ -108,6 +129,7 @@ public class TurnManager : MonoBehaviour
 
     private void StartEnemyTurn()
     {
+        AIManager.instance.aiPlayingOrder = 0;
         foreach (var item in nonPlayableCharacterList)
         {
             if (!item.isStun)

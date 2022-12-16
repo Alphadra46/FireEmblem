@@ -10,7 +10,8 @@ public abstract class SkillClass
     public int cooldown;
     public int turnLeftBeforeReUse;
     public int duration;
-    public LayerMask targetLayer;
+    public string targetLayer;
+    public int durationLeft;
 
     public abstract void Init();
 

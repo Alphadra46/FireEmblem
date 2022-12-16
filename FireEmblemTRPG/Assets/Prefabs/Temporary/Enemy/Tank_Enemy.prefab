@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2258555097745363823}
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalPosition: {x: -0.097, y: 2.339, z: -0.027}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 2258555098995714318}
   - component: {fileID: 2258555098995714319}
   - component: {fileID: 2258555098995714316}
+  - component: {fileID: 574090713224860782}
   m_Layer: 8
   m_Name: Tank_Enemy
   m_TagString: NonPlayableCharacter
@@ -245,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2b441073c72324ca645bce01e8d5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
+  characterName: 
   job: 
   maxHP: 0
   hp: 0
@@ -266,6 +267,30 @@ MonoBehaviour:
   hasActionLeft: 1
   hasMovementLeft: 1
   canCounter: 1
+  isStun: 0
   layerMask:
     serializedVersion: 2
     m_Bits: 256
+  selectedSkillsList: 
+--- !u!114 &574090713224860782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2258555098995714317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9c252962ee876b48ab9b76eeee05401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayTileLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  allyLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  characterMovementSpeed: 10

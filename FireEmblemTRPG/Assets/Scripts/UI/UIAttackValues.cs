@@ -9,7 +9,7 @@ public class UIAttackValues : MonoBehaviour
     [HideInInspector] public BaseArchetype selectedCharacter;
     private BaseArchetype selectedEnemy;
     
-    [SerializeField] private CursorController cursorController;
+    
 
     [Header("Weapons")]
     public TextMeshProUGUI actualWeapon;
@@ -62,7 +62,7 @@ public class UIAttackValues : MonoBehaviour
 
     public void OnWeaponChoosed()
     {
-        cursorController.isAttacking = true;
+        ContextMenu.instance.cursorController.isAttacking = true;
     }
 
 }
